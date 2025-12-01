@@ -13,12 +13,10 @@ import tr4nt.autoplantcrops.config.ConfigFile;
 import tr4nt.autoplantcrops.event.BlockBreakEvent;
 import tr4nt.autoplantcrops.event.ClientTickHandler;
 
-import tr4nt.autoplantcrops.event.KeyInputHandler;
 import tr4nt.autoplantcrops.scheduler.Ticker;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Objects;
 
 import static tr4nt.autoplantcrops.Utils.Utils.isNumber;
 import static tr4nt.autoplantcrops.Utils.Utils.newOption;
@@ -83,7 +81,6 @@ public class AutoPlantCropsClient implements ClientModInitializer {
         ClientTickEvents.START_CLIENT_TICK.register(ticka);
 
         AttackBlockCallback.EVENT.register(new BlockBreakEvent());
-        KeyInputHandler.register();
 
     }
 

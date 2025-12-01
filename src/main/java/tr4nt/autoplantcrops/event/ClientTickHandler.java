@@ -16,6 +16,7 @@ import tr4nt.autoplantcrops.config.ConfigFile;
 
 import static tr4nt.autoplantcrops.Utils.Utils.*;
 import tr4nt.autoplantcrops.mixin.PlayerInventoryAccessor;
+import tr4nt.autoplantcrops.scheduler.Ticker;
 
 public class ClientTickHandler implements ClientTickEvents.StartTick {
     private static long boneMealTick = tick();
@@ -27,7 +28,7 @@ public class ClientTickHandler implements ClientTickEvents.StartTick {
     public void onStartTick(MinecraftClient client) {
 
         if (client.player != null) {
-            if (!ConfigFile.getValue("autoplantcrops").getAsBoolean() || !KeyInputHandler.isOn)return ;
+            if (!ConfigFile.getValue("autoplantcrops").getAsBoolean())return ;
 
             BlockState state = client.player.getSteppingBlockState();
            Block block = state.getBlock();
@@ -61,23 +62,31 @@ public class ClientTickHandler implements ClientTickEvents.StartTick {
                     }
 
                 }
-            } else if (ConfigFile.getValue("autoBoneMeal").getAsBoolean() && onCropBlock && getStackName(item).contains("bone_meal") )
+            } else if (ConfigFile.getValue("autoBoneMeal").getAsBoolean() && onCropBlock && getStackName(item).contains("bone_meal"))
             {
-                BlockHitResult tempres = getHit(client);
-                if (tempres != null)
+                int age = aboveBlockState.get(getAge(blockAbove));
+                if (age < getMaxAge(blockAbove))
                 {
-                    res = new BlockHitResult(BlockPosToVector3d(upPos),Direction.UP, upPos, tempres.isInsideBlock());
-                    allowPlace = true;
-                    bonemealing = true;
+                    BlockHitResult tempres = getHit(client);
+                    if (tempres != null)
+                    {
+                        res = new BlockHitResult(BlockPosToVector3d(upPos),Direction.UP, upPos, tempres.isInsideBlock());
+                        allowPlace = true;
+                        bonemealing = true;
 
+                    }
                 }
+
             }
 //            AutoPlantCropsClient.LOGGER.info(getStackName(item));
             if (ConfigFile.getValue("autoFarmLand").getAsBoolean() && (block instanceof GrassBlock || getBlockName(block).equals("dirt")) && getStackName(item).contains("hoe"))
             {
+
                 BlockHitResult tempres = getHit(client);
-                if (tempres != null)
+
+                if (tempres != null  )
                 {
+
                     res = new BlockHitResult(BlockPosToVector3d(client.player.getSteppingPos()),Direction.UP, client.player.getSteppingPos(), tempres.isInsideBlock());
                     allowPlace = true;
                     hoeing = true;

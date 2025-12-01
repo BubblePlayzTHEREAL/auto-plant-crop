@@ -125,6 +125,7 @@ public class Utils {
 
     public static void queuePlacement(MinecraftClient client, BlockHitResult res, int savedSlotValue, ItemStack pickStack, boolean plantMutliple, Boolean overwrite) {
         if (!ConfigFile.getValue("autoReplant").getAsBoolean() && !overwrite) return;
+        if (Ticker.HasEqualTask(res)) return;
         long latency = getLatency(client);
         int delay = ConfigFile.getValue("autoplantcropsDelay").getAsInt();
         ArrayList info = new ArrayList();

@@ -16,7 +16,7 @@ public class PlaceBlock {
     public static void placeSeed(MinecraftClient client, BlockHitResult hit, boolean plantMultiple)
     {
 
-        if (!ConfigFile.getValue("autoplantcrops").getAsBoolean() || !KeyInputHandler.isOn)return ;
+        if (!ConfigFile.getValue("autoplantcrops").getAsBoolean())return ;
         BlockHitResult tempThe = new BlockHitResult(hit.getPos(), Direction.UP, hit.getBlockPos(), hit.isInsideBlock());
         if (client.world == null) return;
         if (client.interactionManager == null) return;

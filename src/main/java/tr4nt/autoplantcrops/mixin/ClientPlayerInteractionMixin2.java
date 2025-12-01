@@ -2,13 +2,11 @@ package tr4nt.autoplantcrops.mixin;
 
 import net.minecraft.block.*;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.state.property.IntProperty;
-import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -18,13 +16,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import tr4nt.autoplantcrops.AutoPlantCropsClient;
 import tr4nt.autoplantcrops.config.ConfigFile;
 import tr4nt.autoplantcrops.event.BlockBreakEvent;
-import tr4nt.autoplantcrops.event.KeyInputHandler;
-import tr4nt.autoplantcrops.mixin.PlayerInventoryAccessor;
 
 import static tr4nt.autoplantcrops.Utils.Utils.*;
 
@@ -39,7 +33,7 @@ public class ClientPlayerInteractionMixin2
     public void attackBlock(BlockPos pos, CallbackInfoReturnable<Boolean> cir)
     {
 
-        if (!ConfigFile.getValue("autoplantcrops").getAsBoolean() || !KeyInputHandler.isOn)return ;
+        if (!ConfigFile.getValue("autoplantcrops").getAsBoolean())return ;
 
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.world == null) return;

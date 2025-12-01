@@ -26,12 +26,11 @@ public class BlockBreakEvent implements AttackBlockCallback {
     @Override
     public ActionResult interact(PlayerEntity player, World world, Hand hand, BlockPos pos, Direction direction) {
 
-        if (!ConfigFile.getValue("autoplantcrops").getAsBoolean() || !KeyInputHandler.isOn)return  ActionResult.PASS;
+        if (!ConfigFile.getValue("autoplantcrops").getAsBoolean())return  ActionResult.PASS;
         taggedBlockPos = pos;
         taggedBlockState = world.getBlockState(pos);
         BlockState cropBlockState = taggedBlockState;
         Block block = cropBlockState.getBlock();
-        LOGGER.info(String.valueOf(block.getClass()));
         if ( block instanceof CropBlock || block instanceof CocoaBlock || block instanceof NetherWartBlock) {
             IntProperty ageprop = getAge(block);
             int age = cropBlockState.get(ageprop);

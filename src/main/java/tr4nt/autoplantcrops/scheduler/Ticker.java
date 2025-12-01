@@ -2,23 +2,34 @@ package tr4nt.autoplantcrops.scheduler;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.hit.BlockHitResult;
 import tr4nt.autoplantcrops.AutoPlantCropsClient;
 import tr4nt.autoplantcrops.config.ConfigFile;
-import tr4nt.autoplantcrops.event.KeyInputHandler;
 import tr4nt.autoplantcrops.event.PlaceBlock;
 import tr4nt.autoplantcrops.mixin.PlayerInventoryAccessor;
 
 import java.util.ArrayList;
-import java.util.function.Function;
 
 import static tr4nt.autoplantcrops.Utils.Utils.*;
 
 public class Ticker implements ClientTickEvents.StartTick {
     public static ArrayList TaskList = new ArrayList();
 
+    public static boolean HasEqualTask(BlockHitResult res)
+    {
+        for(int i = 0; i < TaskList.size(); i++)
+        {
+            ArrayList entry = (ArrayList) TaskList.get(i);
+            BlockHitResult c = (BlockHitResult) entry.get(1);
 
+            if (res.getBlockPos().equals(c.getBlockPos())) {
+                return true;
+            };
+        }
+        return false;
+    }
     @Override
     public void onStartTick(MinecraftClient client) {
 //        if (!ConfigFile.getValue("autoplantcrops").getAsBoolean() || !KeyInputHandler.isOn) on = false ;
@@ -42,9 +53,13 @@ public class Ticker implements ClientTickEvents.StartTick {
                         return;
 
                     }
-                    switchToItem(client, pickStack);
+                    if (!getStackName(pickStack).contains("hoe") && !getStackName(pickStack).contains("bonemeal"))
+                    {
+                        switchToItem(client, pickStack);
+                    }
                     if (getStackName(client.player.getInventory().getStack(((PlayerInventoryAccessor) client.player.getInventory()).getSelectedSlot())).equals(getStackName(pickStack)))
                     {
+                        switchToItem(client, pickStack);
                         PlaceBlock.placeSeed(clientt, res, plantMultiple);
                         if (ConfigFile.getValue("switchBackToSlot").getAsBoolean())
                         {
